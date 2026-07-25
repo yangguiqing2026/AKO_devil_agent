@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+*.cpython-*.pyc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache
+cache/
+CACHEDIR.TAG
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+data/
