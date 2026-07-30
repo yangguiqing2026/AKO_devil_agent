@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AKO_devil_agent</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #c4a35a;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+    padding: 48px;
+    max-width: 800px;
+  }
+  .icon-wrapper {
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+    position: relative;
+  }
+  .icon-wrapper img, .icon-wrapper svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    animation: pulse-gold 4s ease-in-out infinite;
+  }
+  @keyframes pulse-gold {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(196, 163, 90, 0.4)); }
+    50% { filter: drop-shadow(0 0 18px rgba(196, 163, 90, 0.6)); }
+  }
+  .text-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #c4a35a;
+    border-bottom: 1px solid rgba(196, 163, 90, 0.3);
+    padding-bottom: 12px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: rgba(196, 163, 90, 0.6);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .message {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(196, 163, 90, 0.85);
+    border-left: 2px solid rgba(196, 163, 90, 0.3);
+    padding-left: 16px;
+  }
+  .signature {
+    font-size: 12px;
+    color: rgba(196, 163, 90, 0.4);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .terminal-hint {
+    font-size: 11px;
+    color: rgba(196, 163, 90, 0.25);
+    margin-top: 12px;
+    letter-spacing: 2px;
+  }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: #c4a35a;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="icon-wrapper">
+    <!-- SVG: devil_eye icon (isosceles triangle) -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 520" width="200" height="200">
+     <defs>
+       <clipPath id="tri-clip">
+         <polygon points="256,8 500,504 12,504"/>
+       </clipPath>
+     </defs>
+     <polygon points="256,8 500,504 12,504"
+              fill="#0a0a0f" stroke="#c4a35a" stroke-width="8" stroke-linejoin="round"/>
+     <polygon points="256,38 476,498 36,498"
+              fill="none" stroke="#c4a35a" stroke-width="2" opacity="0.4"/>
+     <polygon points="256,52 464,492 48,492"
+              fill="none" stroke="#c4a35a" stroke-width="0.5" opacity="0.2"/>
+     <g clip-path="url(#tri-clip)">
+       <path d="M 130 320 Q 160 180 256 140 Q 370 180 382 320"
+             fill="none" stroke="#c4a35a" stroke-width="5" stroke-linecap="round"/>
+       <path d="M 130 320 Q 160 390 256 420 Q 370 390 382 320"
+             fill="none" stroke="#c4a35a" stroke-width="5" stroke-linecap="round"/>
+       <circle cx="278" cy="305" r="44" fill="#c4a35a"/>
+       <circle cx="278" cy="305" r="26" fill="#0a0a0f"/>
+       <circle cx="283" cy="300" r="8" fill="#c4a35a" opacity="0.6"/>
+       <polyline points="380,380 350,355 370,330 340,305 360,275"
+                 fill="none" stroke="#c4a35a" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/>
+       <polyline points="370,330 395,312"
+                 fill="none" stroke="#c4a35a" stroke-width="2" stroke-linecap="square"/>
+       <polygon points="348,352 356,346 352,358"
+                fill="#c4a35a" opacity="0.3"/>
+       <rect x="236" y="468" width="40" height="10" fill="#c4a35a" opacity="0.4"/>
+     </g>
+     <line x1="256" y1="22" x2="256" y2="36" stroke="#c4a35a" stroke-width="1.5" opacity="0.3"/>
+     <line x1="82" y1="486" x2="96" y2="478" stroke="#c4a35a" stroke-width="1.5" opacity="0.3"/>
+     <line x1="430" y1="486" x2="416" y2="478" stroke="#c4a35a" stroke-width="1.5" opacity="0.3"/>
+    </svg>
+  </div>
+  <div class="text-block">
+    <div class="title">AKO_devil_agent</div>
+    <div class="subtitle">对抗性审查系统 v1.1</div>
+    <div class="message">
+      我是 AKO_devil_agent。<br/>
+      我会让你不舒服。<br/>
+      如果你准备好了，请回到终端输入 <strong>'开始'</strong>。<span class="cursor"></span>
+    </div>
+    <div class="signature">— AKO_devil_agent，不为你服务</div>
+    <div class="terminal-hint">PRESS ENTER IN TERMINAL TO BEGIN</div>
+  </div>
+</div>
+</body>
+</html>

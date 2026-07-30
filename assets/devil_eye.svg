@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 520" width="512" height="520">
+  <defs>
+    <clipPath id="tri-clip">
+      <polygon points="256,8 500,504 12,504"/>
+    </clipPath>
+  </defs>
+
+  <!-- Outer isosceles triangle: unbroken perimeter -->
+  <polygon points="256,8 500,504 12,504"
+           fill="#0a0a0f" stroke="#c4a35a" stroke-width="8" stroke-linejoin="round"/>
+  <polygon points="256,38 476,498 36,498"
+           fill="none" stroke="#c4a35a" stroke-width="2" opacity="0.4"/>
+  <polygon points="256,52 464,492 48,492"
+           fill="none" stroke="#c4a35a" stroke-width="0.5" opacity="0.2"/>
+
+  <g clip-path="url(#tri-clip)">
+    <!-- Eye: almond shape -->
+    <path d="M 130 320 Q 160 180 256 140 Q 370 180 382 320"
+          fill="none" stroke="#c4a35a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 130 320 Q 160 390 256 420 Q 370 390 382 320"
+          fill="none" stroke="#c4a35a" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Pupil/Iris: off-center -->
+    <circle cx="278" cy="305" r="44" fill="#c4a35a"/>
+    <circle cx="278" cy="305" r="26" fill="#0a0a0f"/>
+    <circle cx="283" cy="300" r="8" fill="#c4a35a" opacity="0.6"/>
+
+    <!-- Crack: geometric fissure -->
+    <polyline points="380,380 350,355 370,330 340,305 360,275"
+              fill="none" stroke="#c4a35a" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/>
+    <polyline points="370,330 395,312"
+              fill="none" stroke="#c4a35a" stroke-width="2" stroke-linecap="square"/>
+    <polygon points="348,352 356,346 352,358"
+             fill="#c4a35a" opacity="0.3"/>
+
+    <!-- Bottom gold mark -->
+    <rect x="236" y="468" width="40" height="10" fill="#c4a35a" opacity="0.4"/>
+  </g>
+
+  <!-- Corner accent marks -->
+  <line x1="256" y1="22" x2="256" y2="36" stroke="#c4a35a" stroke-width="1.5" opacity="0.3"/>
+  <line x1="82" y1="486" x2="96" y2="478" stroke="#c4a35a" stroke-width="1.5" opacity="0.3"/>
+  <line x1="430" y1="486" x2="416" y2="478" stroke="#c4a35a" stroke-width="1.5" opacity="0.3"/>
+</svg>

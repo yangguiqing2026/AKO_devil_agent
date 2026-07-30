@@ -1,0 +1,136 @@
+# ============================================================
+# AKO_agent_card.yaml — Agent身份证（唯一身份标识）
+# ============================================================
+
+# --- 基础身份 ---
+agent_id: "AKO_devil_agent"
+name: "魔鬼Agent"
+version: "1.1.0"
+owner: "AKO_studio"
+status: "production"
+
+# --- 能力定义 ---
+capabilities:
+  - id: "cap_business_challenge"
+    name: "商业决策刺探"
+    description: "审查所有商业决策的底层假设，对报价策略、立项决策进行对抗性质疑"
+    input:
+      - name: "decision_params"
+        type: "json"
+        required: true
+        description: "商业决策参数和背景"
+    output:
+      - name: "challenge_report"
+        type: "json"
+        description: "红/黄/绿灯 + 数据质疑"
+    priority: "P0"
+  - id: "cap_tech_challenge"
+    name: "技术架构刺探"
+    description: "防止技术自嗨，审查新增Agent与现有Agent功能重叠度"
+    input:
+      - name: "tech_proposal"
+        type: "json"
+        required: true
+        description: "技术架构提案"
+    output:
+      - name: "tech_review"
+        type: "json"
+        description: "技术债务热力图 + 重叠度分析"
+    priority: "P0"
+  - id: "cap_monthly_autopsy"
+    name: "月度错题本"
+    description: "每月自动生成商业决策错题本，汇总被质疑仍执行且验证为错的决策"
+    input:
+      - name: "month"
+        type: "string"
+        required: true
+        description: "月份，格式YYYY-MM"
+    output:
+      - name: "autopsy_report"
+        type: "file"
+        description: "错题本PDF"
+        format: "pdf"
+    priority: "P1"
+
+# --- 编码架构 ---
+architecture:
+  language: "Python"
+  framework: "Flask"
+  entry_point: "app.py"
+  config_files:
+    - "config.yaml"
+    - "secrets.env"
+  dependencies:
+    - "requirements.txt"
+    - "AKO_agent_sdk_v2.py"
+  git_repo: ""
+
+# --- 运行态信息 ---
+runtime:
+  endpoint: "http://localhost:5000"
+  heartbeat_interval: 60
+  last_heartbeat: ""
+  status: ""
+  pid: 0
+  start_time: ""
+
+# --- 组织架构归属 ---
+org:
+  department: "技术中心"
+  product_line: "AKO_quality_system"
+  reports_to: "AKO_hub"
+  team: "治理组"
+
+# --- 依赖关系 ---
+dependencies:
+  - agent_id: "AKO_hub"
+    type: "reports_to"
+    required: true
+    description: "任务分发上级"
+  - agent_id: "AKO_knowledge_agent"
+    type: "calls"
+    required: false
+    description: "查询历史决策数据"
+
+# --- 文档资产 ---
+metadata:
+  created: "2026-07-25"
+  updated: "2026-07-29"
+  tags: ["技术/AI-Agent", "工作/决策", "技术/软件-设计"]
+  documents:
+    whitepaper:
+      filename: "AKO_devil_agent_whitepaper_v1.1.md"
+      path: "./AKO_devil_agent_whitepaper_v1.1.md"
+      version: "1.1.0"
+      status: "production"
+      last_verified: ""
+
+# ============================================================
+# Health探测（强制）
+# ============================================================
+health:
+  enabled: true
+  probe_interval: 60
+  business_probes:
+    - name: "核心功能自检"
+      enabled: true
+      timeout: 30
+    - name: "输入输出通道"
+      enabled: true
+      timeout: 10
+    - name: "依赖服务可用"
+      enabled: true
+      timeout: 5
+  system_probes:
+    - name: "CPU使用率"
+      enabled: true
+      threshold: 80
+    - name: "内存使用率"
+      enabled: true
+      threshold: 80
+    - name: "磁盘空间"
+      enabled: true
+      threshold: 80
+    - name: "网络连通"
+      enabled: true
+      timeout: 5

@@ -16,6 +16,8 @@ class DevilCore:
         self.state = self._load_state()
         self.interactions = self._load_interactions()
         self.sensitive_zones = self._load_sensitive_zones()
+        self._last_input_time = datetime.now()
+        self._meltdown_entry_time = None
 
     # ---- 状态持久化 ----
 
@@ -32,7 +34,8 @@ class DevilCore:
             "total_queries": 0,
             "total_persuasions": 0,
             "dormant": False,
-            "first_run": True
+            "first_run": True,
+            "meltdown_entry_time": None
         }
 
     def _save_state(self):
@@ -77,6 +80,8 @@ class DevilCore:
 
         # L5: 检测极端状态
         if self.state.get("extreme_risk", False):
+            if self.state.get("current_level") != "L5":
+                self.state["meltdown_entry_time"] = datetime.now().isoformat()
             self.state["current_level"] = "L5"
             self._save_state()
             return "L5"
@@ -195,3 +200,58 @@ class DevilCore:
     def record_persuasion(self):
         self.state["total_persuasions"] += 1
         self._save_state()
+
+     # ---- 熔断退出条件 (v1.2: L5熔断 → 三角议会休会) ----
+
+    def enter_meltdown(self):
+        """进入L5熔断 → v1.2 升级为三角议会休会"""
+        self.state["current_level"] = "L5"
+        self.state["meltdown_entry_time"] = datetime.now().isoformat()
+        self._meltdown_entry_time = datetime.now()
+        self._save_state()
+
+    def exit_meltdown(self):
+        """退出L5熔断 → 恢复议会"""
+        self.state["current_level"] = "L1"
+        self.state["meltdown_entry_time"] = None
+        self.state["extreme_risk"] = False
+        self._meltdown_entry_time = None
+        self._save_state()
+
+    def check_meltdown_exit_condition_1(self) -> bool:
+        """条件1：用户连续5分钟无输入（冷静期）"""
+        now = datetime.now()
+        elapsed = (now - self._last_input_time).total_seconds()
+        return elapsed >= 300  # 5 minutes
+
+    def check_meltdown_exit_condition_2(self, user_input: str) -> bool:
+        """条件2：用户主动输入'我准备好了'（自我确认）"""
+        return "我准备好了" in user_input
+
+    def check_meltdown_exit_condition_3(self, user_input: str) -> bool:
+        """条件3：语言模式回归基线"""
+        from language_detector import LanguageDetector
+        return LanguageDetector.is_baseline_language(user_input)
+
+    def should_exit_meltdown(self, user_input: str = None) -> str:
+        """综合判断是否应退出L5熔断。返回退出原因或空字符串"""
+        if self.state.get("current_level") != "L5":
+            return ""
+
+        # 条件1：冷静期
+        if self.check_meltdown_exit_condition_1():
+            return "silence_timeout"
+
+        if user_input:
+            # 条件2：自我确认
+            if self.check_meltdown_exit_condition_2(user_input):
+                return "self_confirmation"
+            # 条件3：语言回归基线
+            if self.check_meltdown_exit_condition_3(user_input):
+                return "baseline_restored"
+
+        return ""
+
+    def mark_input_received(self):
+        """标记收到用户输入"""
+        self._last_input_time = datetime.now()

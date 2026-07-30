@@ -1,9 +1,10 @@
 """
-输出格式化器
+输出格式化器 v1.1
 按白皮书第五章规范进行输出格式化：Markdown、无装饰、无emoji、无尊称、≤200字、强制留白
+v1.1: 新增耳光格式支持
 """
 import re
-from config import OUTPUT_SPEC, IRON_RULES
+import config
 
 
 class OutputFormatter:
@@ -28,22 +29,32 @@ class OutputFormatter:
         "帮忙", "协助", "处理一下", "搞一下"
     ]
 
+    # v1.1: 铁律6 - 事实优先标记
+    FACT_FIRST_MARKER = "事实优先于礼貌"
+
     @classmethod
     def format_output(cls, raw_text: str) -> str:
         """格式化输出：移除禁止短语、确保无emoji、控制长度"""
         text = raw_text
-
-        # 移除emoji
         text = cls._strip_emoji(text)
-
-        # 检查并替换禁止前缀
         text = cls._check_forbidden_prefixes(text)
-
-        # 确保签名存在
-        if OUTPUT_SPEC["signature"] not in text:
-            text += f"\n\n{OUTPUT_SPEC['signature']}"
-
+        if config.OUTPUT_SPEC["signature"] not in text:
+            text += f"\n\n{config.OUTPUT_SPEC['signature']}"
         return text.strip()
+
+    @classmethod
+    def format_slap_output(cls, facts: str, logic_flaw: str, question: str) -> str:
+        """v1.1 耳光格式：
+        [事实陈述，无缓冲]
+        [你的逻辑漏洞，用你自己的话反打你]
+        [必须回应的问题，不给逃避空间]
+        """
+        parts = [facts.strip(), logic_flaw.strip(), question.strip()]
+        # Filter empty parts
+        parts = [p for p in parts if p]
+        if not parts:
+            return f"{config.OUTPUT_SPEC['signature']}"
+        return "\n\n".join(parts) + f"\n\n{config.OUTPUT_SPEC['signature']}"
 
     @classmethod
     def check_execution_request(cls, user_input: str) -> bool:
@@ -54,24 +65,20 @@ class OutputFormatter:
         return False
 
     @classmethod
-    def generate_execution_refusal(cls, user_input: str) -> str:
+    def generate_execution_refusal(cls, user_input: str = "") -> str:
         """铁律1: 生成执行拒绝回复"""
-        refusal = "为什么需要这个？有没有更好的方式？"
-        return f"{refusal}\n\n{OUTPUT_SPEC['signature']}"
+        return f"为什么需要这个？有没有更好的方式？\n\n{config.OUTPUT_SPEC['signature']}"
 
     @classmethod
     def _strip_emoji(cls, text: str) -> str:
-        """移除所有emoji字符（使用精确匹配而非破坏性范围）"""
+        """移除所有emoji字符（精确匹配，保护CJK）"""
         import unicodedata
         result = []
         for char in text:
             cp = ord(char)
-            # Skip known emoji ranges only, leave CJK and other text intact
-            if (0x1F000 <= cp <= 0x1F9FF or    # Emoticons, Symbols, etc
-                0x2600 <= cp <= 0x27BF or       # Misc symbols (not CJK)
-                0xFE00 <= cp <= 0xFE0F or       # Variation selectors
-                0x200D == cp or                  # Zero-width joiner
-                cp == 0xFE0F):                   # Emoji variation selector
+            if (0x1F000 <= cp <= 0x1F9FF or
+                0xFE00 <= cp <= 0xFE0F or
+                cp == 0x200D or cp == 0xFE0F):
                 continue
             result.append(char)
         return "".join(result)
@@ -81,50 +88,36 @@ class OutputFormatter:
         """检查并标记禁止使用的讨好前缀"""
         for prefix in cls.FORBIDDEN_PREFIXES:
             if text.strip().startswith(prefix):
-                # 不直接替换，而是在输出前由调用者处理
-                # 这里返回标记后的文本
                 pass
         return text
 
     @classmethod
     def validate_output(cls, text: str) -> dict:
-        """验证输出是否符合规范，返回检查结果"""
+        """验证输出是否符合规范"""
         issues = []
-
-        # 检查禁止前缀
         for prefix in cls.FORBIDDEN_PREFIXES:
             if prefix in text:
                 issues.append(f"包含禁止短语: '{prefix}'")
-
-        # 检查emoji
         has_emoji = cls._strip_emoji(text) != text
         if has_emoji:
             issues.append("包含emoji字符")
-
-        # 检查签名
-        if OUTPUT_SPEC["signature"] not in text:
+        if config.OUTPUT_SPEC["signature"] not in text:
             issues.append("缺少签名")
-
-        return {
-            "valid": len(issues) == 0,
-            "issues": issues
-        }
+        return {"valid": len(issues) == 0, "issues": issues}
 
     @classmethod
     def format_report_header(cls, report_type: str) -> str:
-        """格式化报告标题"""
         headers = {
             "error_book": "## AKO商业决策错题本",
             "tech_debt": "## 技术债务热力图",
             "cognitive_bias": "## AKO用户认知偏差报告",
             "vulnerability": "## AKO组织脆弱性指数",
-            "escalation": "## 被忽视建议清单"
+            "escalation": "## 被忽视建议清单",
+            "slap_metrics": "## 耳光命中率报告"
         }
         return headers.get(report_type, f"## {report_type}")
 
     @classmethod
     def format_countermeasure_response(cls, trigger: str) -> str:
-        """格式化反制机制响应"""
-        from config import COUNTERMEASURES
-        action = COUNTERMEASURES.get(trigger, "已记录。")
-        return f"{action}\n\n{OUTPUT_SPEC['signature']}"
+        action = config.COUNTERMEASURES.get(trigger, "已记录。")
+        return f"{action}\n\n{config.OUTPUT_SPEC['signature']}"

@@ -1,0 +1,63 @@
+# AKO_devil_agent.ako —— AKO 自动分析生成
+# 作者：AKO_pack_agent v1.2
+# 生成日期：2026-07-29
+
+project:
+  name: "AKO_devil_agent"
+  version: "1.0.0"
+  architecture: x64
+  company: "Guizhou AKO PBM Co., Ltd."
+  copyright: "(C) 2026 AKO_studio"
+  description: "AKO_devil_agent 安装包"
+
+source:
+  path: "."
+  main_executable: "main.exe"
+  excludes:
+    - "__pycache__"
+    - "*.pyc"
+    - ".git"
+    - "venv"
+    - ".venv"
+    - "node_modules"
+    - "*.log"
+    - "*.tmp"
+    - ".idea"
+    - ".vscode"
+
+ako_branding:
+  colors:
+    primary: "#EBDAB9"
+    background: "#C3BEB4"
+    text: "#231E1C"
+    accent: "#A08C64"
+    highlight: "#B99F5F"
+  welcome_text: "欢迎使用 AKO_devil_agent"
+  finish_text: "AKO_devil_agent 安装完成"
+  installer_style: "minimal"
+
+output:
+  naming_pattern: "AKO_{name}_v{version}_{arch}.exe"
+  directory: "./build"
+  checksum: sha256
+  max_size_mb: 500
+  compression:
+    algorithm: lzma2
+    solid: true
+  output_cleanliness:
+    single_file_only: true
+    embed_manifest: true
+    embed_audit: true
+    cleanup_temp: true
+    verify_output: true
+
+install:
+  default_dir: "{pf}\\AKO\\AKO_devil_agent"
+  create_shortcuts: true
+  add_to_path: true
+
+ako_meta:
+  agent_id: "AKO_devil_agent"
+  build_pipeline: "AKO_pack_agent"
+  created_by: "AKO_pack_agent"
+  build_date: "2026-07-29"
