@@ -1,0 +1,15 @@
+# ============================================
+# Author: AKO_studio
+# Agent: AKO_devil_agent
+# Configuration File
+# ============================================
+
+agent:
+  id: "AKO_devil_agent"
+  name: "Ako Devil Agent"
+  log_level: "INFO"
+
+# TODO: Add agent-specific configuration below
+# example:
+#   param1: "value1"
+#   param2: 100

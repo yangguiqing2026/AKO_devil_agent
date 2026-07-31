@@ -27,3 +27,7 @@ python app.py
 
 AKO Studio © 2026
 
+
+---
+> 作者：AKO_studio
+> 日期：2026-07-30

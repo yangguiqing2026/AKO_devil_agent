@@ -10,12 +10,12 @@ from ctypes import wintypes
 from pathlib import Path
 import config
 
-from PyQt6.QtCore import Qt, QTimer, QPoint, QSize, QPointF
-from PyQt6.QtGui import (
+# [ARCHIVED_GUI] from PyQt6.QtCore import Qt, QTimer, QPoint, QSize, QPointF
+# [ARCHIVED_GUI] from PyQt6.QtGui import (
     QIcon, QPixmap, QPainter, QColor, QAction,
     QPen, QBrush, QPainterPath, QPolygonF
 )
-from PyQt6.QtWidgets import QApplication, QWidget, QMenu, QLabel
+# [ARCHIVED_GUI] from PyQt6.QtWidgets import QApplication, QWidget, QMenu, QLabel
 
 # ====== Windows API 常量 ======
 NULL = 0
@@ -239,7 +239,7 @@ class TaskbarIcon(QWidget):
 
     def _get_dpi_scale(self) -> float:
         try:
-            screen = QApplication.primaryScreen()
+# [FINAL_CLEAN] screen = QApplication.primaryScreen()
             if screen:
                 return screen.devicePixelRatio()
         except Exception:
@@ -281,7 +281,7 @@ class TaskbarIcon(QWidget):
             x = tb["right"] - self.icon_size - margin
             y = tb["top"] - self.icon_size - margin
         else:
-            screen = QApplication.primaryScreen()
+# [FINAL_CLEAN] screen = QApplication.primaryScreen()
             if screen:
                 geo = screen.availableGeometry()
                 x = geo.right() - self.icon_size - margin
@@ -367,7 +367,7 @@ class TaskbarIcon(QWidget):
             print(f"无法获取状态: {e}")
 
     def _on_exit(self):
-        QApplication.quit()
+# [FINAL_CLEAN] QApplication.quit()
 
     @staticmethod
     def get_resource_usage() -> dict:
@@ -381,7 +381,7 @@ class TaskbarIcon(QWidget):
 
 
 def main():
-    app = QApplication(sys.argv)
+# [FINAL_CLEAN] app = QApplication(sys.argv)
     app.setApplicationName("AKO_devil_agent_taskbar")
     app.setQuitOnLastWindowClosed(False)
 
@@ -395,7 +395,7 @@ def main():
     print("AKO_devil_agent 任务栏图标已启动。")
     print("双击图标唤醒 Devil。")
 
-    sys.exit(app.exec())
+# [FINAL_CLEAN] sys.exit(app.exec())
 
 
 if __name__ == "__main__":

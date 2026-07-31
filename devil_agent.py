@@ -344,7 +344,7 @@ def _open_dashboard():
     dashboard_path = Path(__file__).parent / "assets" / "dashboard.html"
     dashboard_path.parent.mkdir(parents=True, exist_ok=True)
     dashboard_path.write_text(dashboard_html, encoding="utf-8")
-    webbrowser.open(f"file:///{dashboard_path.as_posix()}")
+    # [CLEANED_GUI] webbrowser.open(f"file:///{dashboard_path.as_posix()}")
 
 def main():
     """CLI 入口"""
